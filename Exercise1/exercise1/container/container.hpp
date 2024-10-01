@@ -4,137 +4,114 @@
 
 /* ************************************************************************** */
 
+#include "errors.hpp"
+
 namespace lasd {
 
 /* ************************************************************************** */
 
 class Container {
 
-private:
-
-  // ...
-
 protected:
 
-  // ...
-
-  /* ************************************************************************ */
-
-  // Default constructor
-  // Container() specifiers;
+  unsigned long size = 0;
 
 public:
 
   // Destructor
-  // ~Container() specifiers
+  virtual ~Container() = default;
 
   /* ************************************************************************ */
 
   // Copy assignment
-  // type operator=(argument); // Copy assignment of abstract types is not possible.
-
+  Container& operator=(const Container&) = delete; // Copy assignment of abstract types should not be possible.
   // Move assignment
-  // type operator=(argument); // Move assignment of abstract types is not possible.
+  Container& operator=(Container&&) noexcept = delete; // Move assignment of abstract types should not be possible.
 
   /* ************************************************************************ */
 
   // Comparison operators
-  // type operator==(argument) specifiers; // Comparison of abstract types is not possible.
-  // type operator!=(argument) specifiers; // Comparison of abstract types is not possible.
+  bool operator==(const Container&) const noexcept = delete; // Comparison of abstract types might not be possible.
+  bool operator!=(const Container&) const noexcept = delete; // Comparison of abstract types might not be possible.
 
   /* ************************************************************************ */
 
   // Specific member functions
 
-  // type Empty() specifiers; // (concrete function should not throw exceptions)
+  virtual bool Empty() const noexcept {
+    return (size == 0);
+  } // (concrete function should not throw exceptions)
 
-  // type Size() specifiers; // (concrete function should not throw exceptions)
+  virtual unsigned long Size() const noexcept {
+    return size;
+  } // (concrete function should not throw exceptions)
 
 };
 
 /* ************************************************************************** */
 
-class ClearableContainer {
-  // Must extend Container
-
-private:
-
-  // ...
+class ClearableContainer: virtual public Container {
 
 protected:
 
-  // ...
+  using Container::size;
 
 public:
 
   // Destructor
-  // ~ClearableContainer() specifiers
+  virtual ~ClearableContainer() = default;
 
   /* ************************************************************************ */
 
   // Copy assignment
-  // type operator=(argument); // Copy assignment of abstract types is not possible.
-
+  ClearableContainer& operator=(const ClearableContainer&) = delete; // Copy assignment of abstract types should not be possible.
   // Move assignment
-  // type operator=(argument); // Move assignment of abstract types is not possible.
+  ClearableContainer& operator=(ClearableContainer&&) noexcept = delete; // Move assignment of abstract types should not be possible.
 
   /* ************************************************************************ */
 
   // Comparison operators
-  // type operator==(argument) specifiers; // Comparison of abstract types is not possible.
-  // type operator!=(argument) specifiers; // Comparison of abstract types is not possible.
+  bool operator==(const ClearableContainer&) const noexcept = delete; // Comparison of abstract types might not be possible.
+  bool operator!=(const ClearableContainer&) const noexcept = delete; // Comparison of abstract types might not be possible.
 
   /* ************************************************************************ */
 
-  // Specific member functions
-
-  // type Clear() specifiers;
+  // Specific member function
+  virtual void Clear() = 0;
 
 };
 
 /* ************************************************************************** */
 
-class ResizableContainer {
-  // Must extend ClearableContainer
-
-private:
-
-  // ...
+class ResizableContainer: virtual public ClearableContainer {
 
 protected:
 
-  // ...
+  using Container::size;
 
 public:
 
   // Destructor
-  // ~ResizableContainer() specifiers
+  virtual ~ResizableContainer() = default;
 
   /* ************************************************************************ */
 
   // Copy assignment
-  // type operator=(argument); // Copy assignment of abstract types is not possible.
+  ResizableContainer& operator=(const ResizableContainer&) = delete; // Copy assignment of abstract types should not be possible.
 
   // Move assignment
-  // type operator=(argument); // Move assignment of abstract types is not possible.
+  ResizableContainer& operator=(ResizableContainer&&) noexcept = delete; // Move assignment of abstract types should not be possible.
 
   /* ************************************************************************ */
 
   // Comparison operators
-  // type operator==(argument) specifiers; // Comparison of abstract types is not possible.
-  // type operator!=(argument) specifiers; // Comparison of abstract types is not possible.
+  bool operator==(const ResizableContainer&) const noexcept = delete; // Comparison of abstract types might not be possible.
+  bool operator!=(const ResizableContainer&) const noexcept = delete; // Comparison of abstract types might not be possible.
 
   /* ************************************************************************ */
 
-  // Specific member functions
-
-  // type Resize(argument) specifiers;
-
-  /* ************************************************************************ */
-
-  // Specific member function (inherited from ClearableContainer)
-
-  // type Clear() specifiers; // Override ClearableContainer member
+  // Specific member function
+  virtual void Resize(const unsigned long) = 0;
 
 };
 
