@@ -239,15 +239,18 @@ void QueueVec<Data>::Expand()
     if(sentinel == tail){
         if(head <= tail){
             Vector<Data>::Resize(size*2);
-            sentinel = (head-1)%size;
+            sentinel = size-1;
         }
         else{
             unsigned long newsize = size*2;
 
             Data* temp = new Data[newsize] {};
-            unsigned long i, j;
-            for(i=head, j=0; i!=tail; i=(i+1)%size, ++j){
-                std::swap(elements[i], temp[j]);
+            unsigned long i, j = 0;
+            for(i=head; i<size; ++i){
+                std::swap(elements[i], temp[j++]);
+            }
+            for(i=0; i<tail; ++i){
+                std::swap(elements[i], temp[j++]);
             }
             std::swap(elements, temp);
             delete[] temp;
@@ -256,7 +259,6 @@ void QueueVec<Data>::Expand()
             head = 0;
             tail = j;
             sentinel = size-1;
-            
         }
     }
 }

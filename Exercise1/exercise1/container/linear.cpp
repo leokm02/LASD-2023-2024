@@ -1,5 +1,7 @@
 #include "linear.hpp"
 
+#include <stdexcept>
+
 namespace lasd {
 
 /* ************************************************************************** */
@@ -8,8 +10,8 @@ namespace lasd {
 template <typename Data>
 bool lasd::LinearContainer<Data>::operator==(const LinearContainer & con) const noexcept
 {
-    if(Size() == con.Size()){
-        for(unsigned long i=0; i<Size(); ++i){
+    if(this->Size() == con.Size()){
+        for(unsigned long i=0; i<this->Size(); ++i){
             if(operator[](i) != con.operator[](i)){
                 return false;
             }
@@ -28,7 +30,7 @@ bool lasd::LinearContainer<Data>::operator!=(const LinearContainer & con) const 
 template <typename Data>
 const Data &lasd::LinearContainer<Data>::Front() const
 {
-    if(Empty()){
+    if(this->Empty()){
         throw std::length_error(lasd::ERRMSG_EMPTY_CONTAINER);
     }
 
@@ -38,7 +40,7 @@ const Data &lasd::LinearContainer<Data>::Front() const
 template <typename Data>
 Data &lasd::LinearContainer<Data>::Front()
 {
-    if(Empty()){
+    if(this->Empty()){
         throw std::length_error(lasd::ERRMSG_EMPTY_CONTAINER);
     }
 
@@ -48,21 +50,21 @@ Data &lasd::LinearContainer<Data>::Front()
 template <typename Data>
 const Data &lasd::LinearContainer<Data>::Back() const
 {
-    if(Empty()){
+    if(this->Empty()){
         throw std::length_error(lasd::ERRMSG_EMPTY_CONTAINER);
     }
 
-    return operator[](Size() - 1);
+    return operator[](this->Size() - 1);
 }
 
 template <typename Data>
 Data &lasd::LinearContainer<Data>::Back()
 {
-    if(Empty()){
+    if(this->Empty()){
         throw std::length_error(lasd::ERRMSG_EMPTY_CONTAINER);
     }
 
-    return operator[](Size() - 1);
+    return operator[](this->Size() - 1);
 }
 
 template <typename Data>
@@ -74,7 +76,7 @@ void lasd::LinearContainer<Data>::Traverse(TraverseFun travFun) const
 template <typename Data>
 void lasd::LinearContainer<Data>::PreOrderTraverse(TraverseFun travFun) const
 {
-    for(unsigned long i=0; i<Size(), ++i){
+    for(unsigned long i=0; i < this->Size(); ++i){
         travFun(operator[](i));
     }
 }
@@ -82,9 +84,9 @@ void lasd::LinearContainer<Data>::PreOrderTraverse(TraverseFun travFun) const
 template <typename Data>
 void lasd::LinearContainer<Data>::PostOrderTraverse(TraverseFun travFun) const
 {
-    unsigned long i = Size() - 1;
-    while(i >= 0){
-        travFun(operator[](i--));
+    unsigned long i = this->Size();
+    while(i > 0){
+        travFun(operator[](--i));
     }
 }
 
@@ -97,7 +99,7 @@ void lasd::LinearContainer<Data>::Map(MapFun mapFun)
 template <typename Data>
 void lasd::LinearContainer<Data>::PreOrderMap(MapFun mapFun)
 {
-    for(unsigned long i=0; i<Size(), ++i){
+    for(unsigned long i=0; i < this->Size(); ++i){
         mapFun(operator[](i));
     }
 }
@@ -105,9 +107,9 @@ void lasd::LinearContainer<Data>::PreOrderMap(MapFun mapFun)
 template <typename Data>
 void lasd::LinearContainer<Data>::PostOrderMap(MapFun mapFun)
 {
-    unsigned long i = Size() - 1;
-    while(i >= 0){
-        mapFun(operator[](i--));
+    unsigned long i = this->Size();
+    while(i > 0){
+        mapFun(operator[](--i));
     }
 }
 
@@ -128,7 +130,7 @@ bool lasd::SortableLinearContainer<Data>::operator!=(const SortableLinearContain
 template <typename Data>
 void SortableLinearContainer<Data>::Sort() noexcept
 {
-    QuickSort(0, Size() - 1);
+    QuickSort(0, this->Size() - 1);
 }
 
 template <typename Data>
@@ -143,19 +145,19 @@ void SortableLinearContainer<Data>::QuickSort(const unsigned long p, const unsig
 
 template <typename Data>
 unsigned long SortableLinearContainer<Data>::Partition(const unsigned long p, const unsigned long r) noexcept {
-    Data x = operator[](p);
+    Data x = this->operator[](p);
     unsigned long i = p-1;
     unsigned long j = r+1;
 
     do {
         do { j--; }
-        while (x < operator[](j));
+        while (x < this->operator[](j));
 
         do { i++; }
-        while (x > operator[](i));
+        while (x > this->operator[](i));
 
         if (i < j) {
-            std::swap(operator[](i), operator[](j));
+            std::swap(this->operator[](i), this->operator[](j));
         }
     }
     while (i < j);

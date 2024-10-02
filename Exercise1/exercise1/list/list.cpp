@@ -12,7 +12,7 @@ inline lasd::List<Data>::Node::Node(const Data & dat)
 }
 
 template <typename Data>
-inline lasd::List<Data>::Node::Node(Data && dat) noexcept
+inline lasd::List<Data>::Node::Node(Data && dat)
 {
     std::swap(elem, dat);
 }

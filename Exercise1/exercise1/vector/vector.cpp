@@ -13,8 +13,10 @@ inline lasd::Vector<Data>::Vector(const unsigned long s)
 }
 
 template <typename Data>
-Vector<Data>::Vector(const TraversableContainer<Data> & con) : Vector<Data>(con.Size())
+Vector<Data>::Vector(const TraversableContainer<Data> & con)
 {
+    size = con.Size();
+    elements = new Data[size]{};
     unsigned long i = 0;
     con.Traverse([this, &i](const Data& dat){
         elements[i++] = dat;
@@ -22,8 +24,10 @@ Vector<Data>::Vector(const TraversableContainer<Data> & con) : Vector<Data>(con.
 }
 
 template <typename Data>
-Vector<Data>::Vector(MappableContainer<Data> && con) noexcept : Vector<Data>(con.Size())
+Vector<Data>::Vector(MappableContainer<Data> && con) noexcept
 {
+    size = con.Size();
+    elements = new Data[size]{};
     unsigned long i = 0;
     con.Map([this, &i](Data& dat){
         elements[i++] = std::move(dat);
@@ -31,13 +35,15 @@ Vector<Data>::Vector(MappableContainer<Data> && con) noexcept : Vector<Data>(con
 }
 
 template <typename Data>
-Vector<Data>::Vector(const Vector & con) : Vector<Data>(con.Size())
+Vector<Data>::Vector(const Vector<Data>& con)
 {
-    std::copy(con.elements, con.elements + con.Size(), elements);
+    size = con.size;
+    elements = new Data[size]{};
+    std::copy(con.elements, con.elements + con.size, elements);
 }
 
 template <typename Data>
-Vector<Data>::Vector(Vector && con) noexcept
+Vector<Data>::Vector(Vector<Data>&& con) noexcept
 {
     std::swap(con.size, size);
     std::swap(con.elements, elements);
@@ -46,7 +52,7 @@ Vector<Data>::Vector(Vector && con) noexcept
 template <typename Data>
 Vector<Data>::~Vector()
 {
-    Clear();
+    delete[] elements;
 }
 
 template <typename Data>
@@ -120,7 +126,7 @@ const Data &Vector<Data>::operator[](const unsigned long index) const
     if(index>=Size()){
         throw std::out_of_range(ERRMSG_OUT_OF_BOUNDS);
     }
-    return elements[i];
+    return elements[index];
 }
 
 template <typename Data>
@@ -129,7 +135,7 @@ Data &Vector<Data>::operator[](const unsigned long index)
     if(index>=Size()){
         throw std::out_of_range(ERRMSG_OUT_OF_BOUNDS);
     }
-    return elements[i];
+    return elements[index];
 }
 
 template <typename Data>

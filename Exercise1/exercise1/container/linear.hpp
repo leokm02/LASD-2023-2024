@@ -28,7 +28,7 @@ protected:
 public:
 
   // Destructor
-  virtual ~LinearContainer() = delete;
+  virtual ~LinearContainer() = default;
 
   /* ************************************************************************ */
 

@@ -18,13 +18,6 @@ template <typename Data>
 class List: virtual public ClearableContainer,
             virtual public DictionaryContainer<Data>,
             virtual public LinearContainer<Data> {
-  // Must extend ClearableContainer,
-  //             LinearContainer<Data>,
-  //             DictionaryContainer<Data>
-
-private:
-
-  // ...
 
 protected:
 
@@ -32,50 +25,38 @@ protected:
 
   struct Node {
 
-    // Data
-    // ...
     Data elem;
     Node * next = nullptr;
 
     /* ********************************************************************** */
 
     // Specific constructors
-    // ...
     Node(const Data&);
-    Node(Data&&) noexecpt;
+    Node(Data&&);
 
     /* ********************************************************************** */
 
     // Copy constructor
-    // ...
     Node(const Node&);
 
     // Move constructor
-    // ...
     Node(Node&&) noexcept;
 
     /* ********************************************************************** */
 
     // Destructor
-    // ...
     virtual ~Node() = default;
 
     /* ********************************************************************** */
 
     // Comparison operators
-    // ...
     bool operator==(const Node&) const noexcept;
     bool operator!=(const Node&) const noexcept;
 
     /* ********************************************************************** */
 
-    // Specific member functions
-
-    // ...
-
   };
 
-  // ...
   Node * head = nullptr;
   Node * tail = nullptr;
 

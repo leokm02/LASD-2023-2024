@@ -6,7 +6,7 @@ namespace lasd {
 //Traversable
 template <typename Data>
 template <typename Accumulator>
-inline Accumulator lasd::TraversableContainer<Data>::Fold(FoldFun<Accumulator> foldFun, Accumulator acc) const
+Accumulator lasd::TraversableContainer<Data>::Fold(FoldFun<Accumulator> foldFun, Accumulator acc) const
 {
     Traverse(
         [foldFun, &acc](const Data& dat){
@@ -18,16 +18,15 @@ inline Accumulator lasd::TraversableContainer<Data>::Fold(FoldFun<Accumulator> f
 }
 
 template <typename Data>
-inline bool lasd::TraversableContainer<Data>::Exists(const Data & dat) const noexcept
+bool lasd::TraversableContainer<Data>::Exists(const Data & dat) const noexcept
 {
     Data target = dat;
     bool exists = false;
 
-    Fold(
-        [&target](const Data& datFold, bool existsFold){
-            existsFold |= (datFold == target);
-        },
-        exists
+    Traverse(
+        [&target, &exists](const Data& dat) {                                                 //Funzione lambda: parentesi quadre = contesto
+            exists |= (dat==target);                                                         //uso il riferimento se voglio modificarlo
+        }                                                                                // |= perchè basta che è true una volta
     );
 
     return exists;
@@ -37,7 +36,7 @@ inline bool lasd::TraversableContainer<Data>::Exists(const Data & dat) const noe
 //PreOrderTraversable
 template <typename Data>
 template <typename Accumulator>
-inline Accumulator lasd::PreOrderTraversableContainer<Data>::PreOrderFold(FoldFun<Accumulator> foldFun, Accumulator acc) const
+Accumulator lasd::PreOrderTraversableContainer<Data>::PreOrderFold(FoldFun<Accumulator> foldFun, Accumulator acc) const
 {
     PreOrderTraverse(
         [foldFun, &acc](const Data& dat){
@@ -49,7 +48,7 @@ inline Accumulator lasd::PreOrderTraversableContainer<Data>::PreOrderFold(FoldFu
 }
 
 template <typename Data>
-inline void lasd::PreOrderTraversableContainer<Data>::Traverse(TraverseFun travFun) const
+void lasd::PreOrderTraversableContainer<Data>::Traverse(TraverseFun travFun) const
 {
     PreOrderTraverse(travFun);
 }
@@ -58,7 +57,7 @@ inline void lasd::PreOrderTraversableContainer<Data>::Traverse(TraverseFun travF
 //PostOrderTraversable
 template <typename Data>
 template <typename Accumulator>
-inline Accumulator lasd::PostOrderTraversableContainer<Data>::PostOrderFold(FoldFun<Accumulator> foldFun, Accumulator acc) const
+Accumulator lasd::PostOrderTraversableContainer<Data>::PostOrderFold(FoldFun<Accumulator> foldFun, Accumulator acc) const
 {
     PostOrderTraverse(
         [foldFun, &acc](const Data& dat){
@@ -70,7 +69,7 @@ inline Accumulator lasd::PostOrderTraversableContainer<Data>::PostOrderFold(Fold
 }
 
 template <typename Data>
-inline void lasd::PostOrderTraversableContainer<Data>::Traverse(TraverseFun travFun) const
+void lasd::PostOrderTraversableContainer<Data>::Traverse(TraverseFun travFun) const
 {
     PostOrderTraverse(travFun);
 }
@@ -79,7 +78,7 @@ inline void lasd::PostOrderTraversableContainer<Data>::Traverse(TraverseFun trav
 //InOrderTraversable
 template <typename Data>
 template <typename Accumulator>
-inline Accumulator lasd::InOrderTraversableContainer<Data>::InOrderFold(FoldFun<Accumulator> foldFun, Accumulator acc) const
+Accumulator lasd::InOrderTraversableContainer<Data>::InOrderFold(FoldFun<Accumulator> foldFun, Accumulator acc) const
 {
     InOrderTraverse(
         [foldFun, &acc](const Data& dat){
@@ -91,7 +90,7 @@ inline Accumulator lasd::InOrderTraversableContainer<Data>::InOrderFold(FoldFun<
 }
 
 template <typename Data>
-inline void lasd::InOrderTraversableContainer<Data>::Traverse(TraverseFun travFun) const
+void lasd::InOrderTraversableContainer<Data>::Traverse(TraverseFun travFun) const
 {
     InOrderTraverse(travFun);
 }
@@ -100,7 +99,7 @@ inline void lasd::InOrderTraversableContainer<Data>::Traverse(TraverseFun travFu
 //BreadthTraversable
 template <typename Data>
 template <typename Accumulator>
-inline Accumulator lasd::BreadthTraversableContainer<Data>::BreadthFold(FoldFun<Accumulator> foldFun, Accumulator acc) const
+Accumulator lasd::BreadthTraversableContainer<Data>::BreadthFold(FoldFun<Accumulator> foldFun, Accumulator acc) const
 {
     BreadthTraverse(
         [foldFun, &acc](const Data& dat){
@@ -112,7 +111,7 @@ inline Accumulator lasd::BreadthTraversableContainer<Data>::BreadthFold(FoldFun<
 }
 
 template <typename Data>
-inline void lasd::BreadthTraversableContainer<Data>::Traverse(TraverseFun travFun) const
+void lasd::BreadthTraversableContainer<Data>::Traverse(TraverseFun travFun) const
 {
     BreadthTraverse(travFun);
 }

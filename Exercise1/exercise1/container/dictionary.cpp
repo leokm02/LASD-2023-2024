@@ -8,11 +8,10 @@ inline bool lasd::DictionaryContainer<Data>::InsertAll(const TraversableContaine
 {
     bool success = true;
 
-    travCon.Fold(
-        [this](const Data& dat, bool successFold){
-            successFold &= Insert(dat);
-        },
-        success
+    travCon.Traverse(
+        [this, &success](const Data& dat){
+            success &= Insert(dat);                    //&= operazione AND bit a bit
+        }
     );
 
     return success;
@@ -37,11 +36,10 @@ inline bool lasd::DictionaryContainer<Data>::RemoveAll(const TraversableContaine
 {
     bool success = true;
 
-    travCon.Fold(
-        [this](const Data& dat, bool successFold){
-            successFold &= Remove(dat);
-        },
-        success
+    travCon.Traverse(
+        [this, &success](const Data& dat){
+            success &= Remove(dat);
+        }
     );
 
     return success;
@@ -52,11 +50,10 @@ inline bool lasd::DictionaryContainer<Data>::InsertSome(const TraversableContain
 {
     bool success = false;
 
-    travCon.Fold(
-        [this](const Data& dat, bool successFold){
-            successFold |= Insert(dat);
-        },
-        success
+    travCon.Traverse(
+        [this, &success](const Data& dat){
+            success |= Insert(dat);
+        }
     );
 
     return success;
@@ -81,11 +78,10 @@ inline bool lasd::DictionaryContainer<Data>::RemoveSome(const TraversableContain
 {
     bool success = false;
 
-    travCon.Fold(
-        [this](const Data& dat, bool successFold){
-            successFold |= Remove(dat);
-        },
-        success
+    travCon.Traverse(
+        [this, &success](const Data& dat){
+            success |= Remove(dat);
+        }
     );
 
     return success;
