@@ -21,51 +21,51 @@ class Hashable {
 
 public:
 
-  // type operator()(argument) specifiers; // (concrete function should not throw exceptions)
+  unsigned long operator()(const Data&) const noexcept = 0;
 
 };
 
 /* ************************************************************************** */
 
 template <typename Data>
-class HashTable {
-                  // Must extend ResizableContainer,
-                  //             DictionaryContainer<Data>
-
-private:
-
-  // ...
+class HashTable : virtual public ResizableContainer,
+                  virtual public DictionaryContainer<Data> {
 
 protected:
 
-  // using DictionaryContainer<Data>::???;
+  using Container::size;
 
-  // ...
+  unsigned long a = 1;
+  unsigned long b = 0;
+  static const unsigned long p = 1000000007;
+
+  std::default_random_engine gen = std::default_random_engine(std::random_device{}());
+  std::uniform_int_distribution<unsigned long> distA = std::uniform_int_distribution<unsigned long>(1, p-1);
+  std::uniform_int_distribution<unsigned long> distB = std::uniform_int_distribution<unsigned long>(0, p-1);
+
+  static const Hashable<Data> hash;
+  unsigned long tableSize = 128;
+
+  HashTable();
+  HashTable(const HashTable&);
+  HashTable(HashTable&&) noexcept;
+  HashTable& operator=(const HashTable&);
+  HashTable& operator=(HashTable&&) noexcept;
 
 public:
 
   // Destructor
-  // ~HashTable() specifiers
-
-  /* ************************************************************************ */
-
-  // Copy assignment
-  // type operator=(argument); // Copy assignment of abstract types should not be possible.
-
-  // Move assignment
-  // type operator=(argument); // Move assignment of abstract types should not be possible.
-
-  /* ************************************************************************ */
+  virtual ~HashTable() = default;
 
   // Comparison operators
-  // type operator==(argument) specifiers; // Comparison of abstract hashtable is possible but not required.
-  // type operator!=(argument) specifiers; // Comparison of abstract hashtable is possible but not required.
+  bool operator==(const HashTable&) const noexcept = delete;
+  bool operator!=(const HashTable&) const noexcept = delete;
 
 protected:
 
   // Auxiliary member functions
-
-  // type HashKey(argument) specifiers;
+  unsigned long HashKey(const Data&) const noexcept;
+  unsigned long HashKey(const unsigned long) const noexcept;
 
 };
 
