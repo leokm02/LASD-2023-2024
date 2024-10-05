@@ -167,34 +167,29 @@ BinaryTreeVec<Data>::~BinaryTreeVec() {
 
 template <typename Data>
 BinaryTreeVec<Data>& BinaryTreeVec<Data>::operator=(const BinaryTreeVec& con){
-    BinaryTreeVec<Data>* temp = new BinaryTreeVec<Data>(con);
-    std::swap(*this, *temp);
-    delete temp;
 
+    if (this->Empty()){
+        if (!con.Empty()) {
+            treeVec.Resize(con.Size());
+            for(unsigned long i = 0; i < con.Size(); i++){
+                treeVec[i] = new NodeVec(con.treeVec[i]->element, i, &treeVec);
+            }
+        }
+    }
+    else {
+        if (con.Empty()){
+            Clear();
+        }
+        else {
+            treeVec.Resize(con.Size());
+            for(unsigned long i = 0; i < size; i++){
+                treeVec[i] = new NodeVec(con.treeVec[i]->element, i, &treeVec);
+            }
+        }
+    }
+
+    size = con.Size();
     return *this;
-
-    // if (this->Empty()){
-    //     if (con.size != 0) {
-    //         treeVec.Resize(con.Size());
-    //         for(unsigned long i = 0; i < con.Size(); i++){
-    //             treeVec[i] = new NodeVec(con.treeVec[i]->element, i, &treeVec);
-    //         }
-    //     }
-    // }
-    // else {
-    //     if (con.size == 0){
-    //         Clear();
-    //     }
-    //     else {
-    //         treeVec.Resize(con.Size());
-    //         for(unsigned long i = 0; i < size; i++){
-    //             treeVec[i] = new NodeVec(con.treeVec[i]->element, i, &treeVec);
-    //         }
-    //     }
-    // }
-
-    // size = con.Size();
-    // return *this;
 }
 
 template <typename Data>
@@ -254,6 +249,7 @@ void BinaryTreeVec<Data>::BreadthMap(MapFun fun) {
         fun(treeVec[i]->Element());
     }
 }
+
 
 /* ************************************************************************** */
 

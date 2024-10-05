@@ -13,13 +13,18 @@ namespace lasd {
 
 /* ************************************************************************** */
 
-
 template <typename Data>
 class BinaryTreeVec: virtual public MutableBinaryTree<Data> {
+  // Must extend MutableBinaryTree<Data>
+
+private:
+
+  // ...
 
 protected:
 
   using Container::size;
+
   using typename BinaryTree<Data>::Node;
   using typename MutableBinaryTree<Data>::MutableNode;
 
@@ -30,7 +35,7 @@ protected:
     
     Data element;
     unsigned long int currIndex;
-    Vector<NodeVec*> *treePtr = nullptr;         
+    Vector<NodeVec*> *treePtr = nullptr;
 
     NodeVec(const Data&, unsigned long, Vector<NodeVec*>*);
     NodeVec(Data&&, unsigned long, Vector<NodeVec*>*);
@@ -47,14 +52,14 @@ protected:
     NodeVec& operator=(NodeVec&&) noexcept;
 
     bool operator==(const NodeVec&) const noexcept;
-    bool operator!=(const NodeVec&) const noexcept;
+    inline bool operator!=(const NodeVec&) const noexcept;
 
-    const Data& Element() const noexcept override;
-    Data& Element() noexcept override;
+    inline const Data& Element() const noexcept override;
+    inline Data& Element() noexcept override;
 
-    bool IsLeaf() const noexcept override;
-    bool HasLeftChild() const noexcept override;
-    bool HasRightChild() const noexcept override;
+    inline bool IsLeaf() const noexcept override;
+    inline bool HasLeftChild() const noexcept override;
+    inline bool HasRightChild() const noexcept override;
 
     const Node& LeftChild() const override;
     const Node& RightChild() const override;
@@ -82,10 +87,10 @@ public:
 
   // Copy constructor
   // BinaryTreeVec(argument) specifiers;
-  BinaryTreeVec(const BinaryTreeVec& alb);
+  BinaryTreeVec(const BinaryTreeVec&);
   // Move constructor
   // BinaryTreeVec(argument) specifiers;
-  BinaryTreeVec(BinaryTreeVec&& alb) noexcept;
+  BinaryTreeVec(BinaryTreeVec&&) noexcept;
   /* ************************************************************************ */
 
   // Destructor
@@ -140,7 +145,7 @@ public:
   using typename MappableContainer<Data>::MapFun;
 
   void BreadthMap(MapFun) override;
-
+  
 protected:
 
   // Auxiliary functions, if necessary!
